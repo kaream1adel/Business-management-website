@@ -1,0 +1,13 @@
+node_modules/
+.env
+.dev.vars*
+.wrangler/
+scripts/out/
+client/dist/
+*.log
+backups/
+
+# Local only, never published
+.claude/
+Daily Dashboard.html
+scripts/import-notion.mjs

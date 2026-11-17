@@ -1,0 +1,18 @@
+{
+  "name": "business-dashboard",
+  "version": "1.0.0",
+  "description": "Business dashboard on Cloudflare Workers + D1",
+  "scripts": {
+    "dev": "npm run build && concurrently -k -n api,web -c blue,magenta \"wrangler dev --port 8787\" \"cd client && npm run dev\"",
+    "build": "cd client && npm run build",
+    "deploy": "npm run build && wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply bizdash --local && wrangler d1 migrations apply bizdash-demo --local",
+    "db:migrate": "wrangler d1 migrations apply bizdash --remote && wrangler d1 migrations apply bizdash-demo --remote",
+    "db:backup": "node -e \"require('fs').mkdirSync('backups',{recursive:true})\" && wrangler d1 export bizdash --remote --output backups/bizdash-backup.sql",
+    "install:all": "npm install && cd client && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "wrangler": "^4.86.0"
+  }
+}

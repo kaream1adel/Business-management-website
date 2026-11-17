@@ -1,0 +1,35 @@
+name = "bizdash"
+main = "worker/src/index.js"
+compatibility_date = "2025-09-01"
+
+# React build, served by Cloudflare. /api/* goes to the Worker first;
+# any other unknown path falls back to index.html (client-side views).
+[assets]
+directory = "client/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bizdash"
+database_id = "0ca35fcb-9d86-44cd-8aa5-d901fcdad388"
+migrations_dir = "worker/migrations"
+
+# Sample data for "See demo" on the sign-in page (see worker/src/demo.js)
+[[d1_databases]]
+binding = "DEMO_DB"
+database_name = "bizdash-demo"
+database_id = "209cab9e-6943-4b01-882d-02648e4b2e4a"
+migrations_dir = "worker/migrations"
+
+# Puts the demo's sample data back every night (01:00 UTC)
+[triggers]
+crons = ["0 1 * * *"]
+
+[observability]
+enabled = true
+
+# Secrets (never in this file): DASHBOARD_USER, DASHBOARD_PASS, JWT_SECRET
+#   production:  npx wrangler secret put DASHBOARD_PASS
+#   local dev:   .dev.vars (gitignored)
